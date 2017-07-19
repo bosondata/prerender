@@ -62,4 +62,6 @@ class S3Cache(CacheBackend):
     def _filename(self, url, format):
         parsed_url = urlparse(url)
         encoded_name = urlencode(parsed_url.path)
+        if parsed_url.query:
+            encoded_name += '?{}'.format(urlencode(parsed_url.query))
         return os.path.join(parsed_url.hostname, encoded_name)
