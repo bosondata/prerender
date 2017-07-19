@@ -60,8 +60,6 @@ class S3Cache(CacheBackend):
         )
 
     def _filename(self, url, format):
-        hex_name = codecs.encode(url.encode('utf-8'), 'hex').decode('utf-8')
-        sub_dir = os.path.join(hex_name[:2], hex_name[2:4])
-        name = hex_name[4:] + '.{}'.format(format)
         parsed_url = urlparse(url)
-        return os.path.join(parsed_url.hostname, sub_dir, name)
+        encoded_name = urlencode(parsed_url.path)
+        return os.path.join(parsed_url.hostname, encoded_name)
