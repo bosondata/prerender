@@ -2,7 +2,7 @@ import os
 import io
 import codecs
 import asyncio
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urlencode
 from typing import Optional
 
 import minio
