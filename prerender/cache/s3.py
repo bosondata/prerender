@@ -59,6 +59,15 @@ class S3Cache(CacheBackend):
             metadata={'url': key, 'ttl': ttl}
         )
 
+    def modified_since(self, key: str, format: str = 'html') -> int:
+        path = self._filename(key, format)
+        try:
+            res = self.client.stat_object(S3_BUCKET, path)
+        except minio.error.NoSuchKey:
+            return
+        return res.last_modified
+
+
     def _filename(self, url, format):
         parsed_url = urlparse(url)
         encoded_name = quote_plus(parsed_url.path)
