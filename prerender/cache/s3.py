@@ -59,7 +59,7 @@ class S3Cache(CacheBackend):
             metadata={'url': key, 'ttl': ttl}
         )
 
-    async def modified_since(self, key: str, format: str = 'html') -> float:
+    async def modified_since(self, key: str, format: str = 'html') -> Optional[float]:
         path = self._filename(key, format)
         loop = asyncio.get_event_loop()
         try:

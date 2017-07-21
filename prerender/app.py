@@ -137,7 +137,7 @@ async def handle_request(request, exception):
     if not skip_cache:
         try:
             data = await cache.get(url, format)
-            modified_since = await cache.modified_since(url)
+            modified_since = await cache.modified_since(url) or time.time()
             headers['Last-Modified'] = formatdate(modified_since, usegmt=True)
 
             try:

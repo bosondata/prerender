@@ -28,6 +28,6 @@ class DiskCache(CacheBackend):
         compressed = lzma.compress(payload)
         self._cache.set(key + format, compressed, expire=ttl)
 
-    async def modified_since(self, key: str, format: str = 'html') -> float:
+    async def modified_since(self, key: str, format: str = 'html') -> Optional[float]:
         stats = await stat(key + format)
         return stats.st_mtime
