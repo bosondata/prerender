@@ -2,7 +2,7 @@ import re
 from functools import reduce
 
 _SCRIPT_TAG_RE = re.compile(r'<script(.*?)>([\S\s]*?)<\/script>', re.I)
-_META_FRAGMENT_TAG_RE = re.compile(r'<meta[^<>]*name=[\'"]fragment[\'"][^<>]*content=[\'"]\![\'"][^<>]*[^<>]*>', re.I)
+_META_FRAGMENT_TAG_RE = re.compile(r'<meta[^<>]*name=[\'"]fragment[\'"][^<>]*content=[\'"]\![\'"][^<>]*>', re.I)
 
 
 def apply_filters(html: str, filters: list) -> str:
