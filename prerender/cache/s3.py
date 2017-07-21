@@ -59,11 +59,12 @@ class S3Cache(CacheBackend):
             metadata={'url': key, 'ttl': ttl}
         )
 
-    def modified_since(self, key: str, format: str = 'html') -> int:
+    async def modified_since(self, key: str, format: str = 'html') -> int:
         path = self._filename(key, format)
+        loop = asyncio.get_event_loop()
         try:
-            res = self.client.stat_object(S3_BUCKET, path)
-        except minio.error.NoSuchKey:
+            res = await loop.run_in_executor(None, self.client.stat_object, S3_BUCKET, path)
+        except (minio.error.NoSuchKey, asyncio.CancelledError):
             return
         return res.last_modified
 

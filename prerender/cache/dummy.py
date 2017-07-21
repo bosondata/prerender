@@ -10,5 +10,5 @@ class DummyCache(CacheBackend):
     def set(self, key: str, payload: bytes, ttl: int = None, format: str = 'html') -> None:
         pass
 
-    def modified_since(self, key: str, format: str = 'html') -> int:
+    async def modified_since(self, key: str, format: str = 'html') -> int:
         return time.time()

@@ -137,8 +137,8 @@ async def handle_request(request, exception):
     if not skip_cache:
         try:
             data = await cache.get(url, format)
-            modified_since = cache.modified_since(url)
-            headers.update({'Last-Modified': formatdate(modified_since, usegmt=True)})
+            modified_since = await cache.modified_since(url)
+            headers['Last-Modified'] = formatdate(modified_since, usegmt=True)
 
             try:
                 if_modified_since = parsedate(request.headers.get('If-Modified-Since'))
@@ -153,7 +153,7 @@ async def handle_request(request, exception):
                 return response.text('', status=304, headers=headers)
 
             if data is not None:
-                headers.update({'X-Prerender-Cache': 'hit'})
+                headers['X-Prerender-Cache'] = 'hit'
                 logger.info('Got 200 for %s in cache in %dms',
                             url,
                             int((time.time() - start_time) * 1000))
@@ -177,8 +177,7 @@ async def handle_request(request, exception):
 
     try:
         data, status_code = await _render(request.app.prerender, url, format)
-        headers.update({'X-Prerender-Cache': 'miss'})
-        headers.update({'Last-Modified': formatdate(usegmt=True)})
+        headers.update({'X-Prerender-Cache': 'miss', 'Last-Modified': formatdate(usegmt=True)})
         logger.info('Got %d for %s in %dms',
                     status_code,
                     url,
